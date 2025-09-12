@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 import {
@@ -50,47 +50,30 @@ interface MenuItem {
   imageUrl: string;
 }
 
-// Data menu dummy untuk ditampilkan di depan
-const dummyMenu = [
-  {
-    id: 1,
-    name: "Nasi Goreng Royal",
-    description: "Nasi goreng spesial dengan udang, ayam, dan telur mata sapi.",
-    price: 35000,
-    imageUrl: "https://placehold.co/600x400/0F172A/FFF?text=Nasi+Goreng",
-  },
-  {
-    id: 2,
-    name: "Steak Sirloin",
-    description: "200gr daging sirloin impor disajikan dengan saus jamur.",
-    price: 125000,
-    imageUrl: "https://placehold.co/600x400/0F172A/FFF?text=Steak",
-  },
-  {
-    id: 3,
-    name: "Spaghetti Carbonara",
-    description: "Pasta spaghetti dengan saus krim, keju, dan smoked beef.",
-    price: 55000,
-    imageUrl: "https://placehold.co/600x400/0F172A/FFF?text=Spaghetti",
-  },
-  {
-    id: 4,
-    name: "Royal Blue Ocean",
-    description: "Minuman soda biru menyegarkan dengan sirup leci.",
-    price: 25000,
-    imageUrl: "https://placehold.co/600x400/0F172A/FFF?text=Minuman",
-  },
-];
-
 interface CartItem extends MenuItem {
   quantity: number;
 }
 
 export default function Home() {
+  const [menu, setMenu] = useState<MenuItem[]>([]);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [customerName, setCustomerName] = useState("");
   const [customerWa, setCustomerWa] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchMenu = async () => {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_BASE_URL}/menu`);
+        const data = await response.json();
+        setMenu(data);
+      } catch (error) {
+        console.error("Failed to fetch menu:", error);
+      }
+    };
+
+    fetchMenu();
+  }, []);
 
   const handleAddToCart = (item: MenuItem) => {
     setCart((prevCart) => {
@@ -201,11 +184,11 @@ export default function Home() {
           {/* Menu Grid */}
           <div className="w-full max-w-5xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
-              {dummyMenu.map((item) => {
+              {menu.map((item) => {
                 const cartItem = cart.find(ci => ci.id === item.id);
                 return (
                   <div key={item.id} className="bg-white/80 backdrop-blur-sm rounded-lg shadow-lg overflow-hidden flex flex-col">
-                    <img src={item.imageUrl} alt={item.name} className="w-full h-48 object-cover" />
+                    <img src={`${process.env.NEXT_PUBLIC_EXTERNAL_APACHE}${item.imageUrl}`} alt={item.name} className="w-full h-48 object-cover" />
                     <div className="p-6 flex flex-col flex-grow">
                       <h3 className="text-xl font-bold text-gray-800">{item.name}</h3>
                       <p className="text-gray-600 my-2 flex-grow">{item.description}</p>
