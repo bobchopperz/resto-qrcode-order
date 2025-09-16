@@ -43,6 +43,7 @@ const icons = [
 ];
 
 interface MenuItem {
+  _id: string;
   name: string;
   description: string;
   price: number;
@@ -59,6 +60,7 @@ export default function Home() {
   const [customerName, setCustomerName] = useState("");
   const [customerWa, setCustomerWa] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const fetchMenu = async () => {
@@ -76,11 +78,11 @@ export default function Home() {
 
   const handleAddToCart = (item: MenuItem) => {
     setCart((prevCart) => {
-      const existingItem = prevCart.find((cartItem) => cartItem.name === item.name);
+      const existingItem = prevCart.find((cartItem) => cartItem._id === item._id);
       if (existingItem) {
         // Item sudah ada, tambah quantity
         return prevCart.map((cartItem) =>
-          cartItem.name === item.name
+          cartItem._id === item._id
             ? { ...cartItem, quantity: cartItem.quantity + 1 }
             : cartItem
         );
@@ -91,11 +93,11 @@ export default function Home() {
     });
   };
 
-  const handleUpdateQuantity = (itemName: string, amount: number) => {
+  const handleUpdateQuantity = (itemId: string, amount: number) => {
     setCart((prevCart) => {
       const updatedCart = prevCart
         .map((item) => {
-          if (item.name === itemName) {
+          if (item._id === itemId) {
             return { ...item, quantity: item.quantity + amount };
           }
           return item;
@@ -126,34 +128,55 @@ export default function Home() {
       return;
     }
 
+    setIsSubmitting(true);
+
+    // Format nomor WhatsApp ke "62"
+    const formattedWa = customerWa.startsWith("0") ? `62${customerWa.substring(1)}` : customerWa;
+
     const orderData = {
-      customer: {
-        name: customerName,
-        whatsapp: customerWa,
-      },
-      items: cart.map(item => ({ name: item.name, quantity: item.quantity, price: item.price })),
-      total: totalPrice,
+      _id : crypto.randomUUID(),
+      nama_pelanggan: customerName,
+      no_wa_pelanggan: formattedWa,
+      orders: cart.map(item => ({
+        menu_id: item._id,
+        kuantiti: item.quantity,
+        sub_total: item.price * item.quantity,
+      })),
+      total_kesuluruhan: totalPrice,
+      timestamp: {"$date": new Date().toISOString()},
     };
 
-    console.log("Data yang akan dikirim ke backend:", orderData);
-    alert("Sipp Kakak pesanannya sedang diproses, silakan menunggu ");
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_BASE_URL}/order`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(orderData),
+      });
 
-    // Reset state untuk kembali ke tampilan awal setelah alert ditutup
-    setIsModalOpen(false);
-    setCart([]);
-    setCustomerName("");
-    setCustomerWa("");
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ message: 'No error details from server.' }));
+        console.error("Backend error:", errorData);
+        throw new Error(`Gagal mengirim pesanan. Status: ${response.status}`);
+      }
 
-    // NANTINYA: Kirim data ke backend
-    // try {
-    //   const response = await fetch('https://api.backend-anda.com/order', {
-    //     // ... fetch options
-    //   });
-    //   if (!response.ok) throw new Error('Gagal mengirim pesanan');
-    //   alert('Pesanan berhasil dikirim!');
-    // } catch (error) {
-    //   alert('Terjadi kesalahan saat mengirim pesanan.');
-    // }
+      alert("Sipp Kakak! Pesananmu sudah kami terima dan sedang diproses.");
+
+      // Reset state untuk kembali ke tampilan awal
+      setIsModalOpen(false);
+      setCart([]);
+      setCustomerName("");
+      setCustomerWa("");
+
+    } catch (error) {
+      console.error("Failed to submit order:", error);
+      // Menampilkan pesan error yang lebih informatif jika ada
+      const errorMessage = error instanceof Error ? error.message : 'Terjadi kesalahan saat mengirim pesanan.';
+      alert(errorMessage + ' Silakan coba lagi.');
+    } finally {
+        setIsSubmitting(false);
+    }
   };
 
   return (
@@ -184,9 +207,9 @@ export default function Home() {
           <div className="w-full max-w-5xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
               {menu.map((item) => {
-                const cartItem = cart.find(ci => ci.name === item.name);
+                const cartItem = cart.find(ci => ci._id === item._id);
                 return (
-                  <div key={item.name} className="bg-white/80 backdrop-blur-sm rounded-lg shadow-lg overflow-hidden flex flex-col">
+                  <div key={item._id} className="bg-white/80 backdrop-blur-sm rounded-lg shadow-lg overflow-hidden flex flex-col">
                     <img src={`${process.env.NEXT_PUBLIC_EXTERNAL_APACHE}${item.imageUrl}`} alt={item.name} className="w-full h-48 object-cover" />
                     <div className="p-6 flex flex-col flex-grow">
                       <h3 className="text-xl font-bold text-gray-800">{item.name}</h3>
@@ -197,11 +220,11 @@ export default function Home() {
                         </p>
                         {cartItem ? (
                           <div className="flex items-center gap-2">
-                            <button onClick={() => handleUpdateQuantity(item.name, -1)} className="bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-red-600 transition-colors">
+                            <button onClick={() => handleUpdateQuantity(item._id, -1)} className="bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-red-600 transition-colors">
                               <Minus size={16} />
                             </button>
                             <span className="font-bold text-lg w-8 text-center">{cartItem.quantity}</span>
-                            <button onClick={() => handleUpdateQuantity(item.name, 1)} className="bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-green-600 transition-colors">
+                            <button onClick={() => handleUpdateQuantity(item._id, 1)} className="bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-green-600 transition-colors">
                               <Plus size={16} />
                             </button>
                           </div>
@@ -255,7 +278,7 @@ export default function Home() {
             <div className="p-6 max-h-[60vh] overflow-y-auto">
               <div className="space-y-4">
                 {cart.map((item) => (
-                  <div key={item.name} className="flex justify-between items-start">
+                  <div key={item._id} className="flex justify-between items-start">
                     <div>
                       <p className="font-semibold text-gray-800">{item.name}</p>
                       <p className="text-sm text-gray-500">
@@ -300,9 +323,10 @@ export default function Home() {
               </p>
               <button
                 onClick={handleSubmitOrder}
-                className="w-full bg-emerald-600 text-white font-bold py-3 rounded-lg hover:bg-emerald-700 transition-colors text-lg"
+                disabled={isSubmitting}
+                className="w-full bg-emerald-600 text-white font-bold py-3 rounded-lg hover:bg-emerald-700 transition-colors text-lg disabled:bg-emerald-500 disabled:cursor-not-allowed-400 disabled:cursor-not-allowed"
               >
-                Lanjutkan Pesanan
+                  {isSubmitting ? 'Loading...' : 'Kirim Pesanan'}
               </button>
             </div>
           </div>
