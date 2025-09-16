@@ -134,6 +134,7 @@ export default function Home() {
     const formattedWa = customerWa.startsWith("0") ? `62${customerWa.substring(1)}` : customerWa;
 
     const orderData = {
+      _id: crypto.randomUUID(),
       nama_pelanggan: customerName,
       no_wa_pelanggan: formattedWa,
       orders: cart.map(item => ({
