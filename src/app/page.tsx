@@ -224,7 +224,7 @@ export default function Home() {
                             <button onClick={() => handleUpdateQuantity(item._id, -1)} className="bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-red-600 transition-colors">
                               <Minus size={16} />
                             </button>
-                            <span className="font-bold text-lg w-8 text-center">{cartItem.quantity}</span>
+                            <span className="font-bold text-lg w-8 text-center text-sky-600">{cartItem.quantity}</span>
                             <button onClick={() => handleUpdateQuantity(item._id, 1)} className="bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-green-600 transition-colors">
                               <Plus size={16} />
                             </button>
