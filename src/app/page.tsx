@@ -139,6 +139,7 @@ export default function Home() {
       no_wa_pelanggan: formattedWa,
       orders: cart.map(item => ({
         menu_id: item._id,
+        name: item.name,
         kuantiti: item.quantity,
         sub_total: item.price * item.quantity,
       })),
