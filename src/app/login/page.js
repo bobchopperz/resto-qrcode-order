@@ -1,29 +1,49 @@
 
-"use client"; // Tandai sebagai Client Component
+"use client";
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
+// Ganti dengan URL base backend Anda.
+const API_BASE_URL = 'http://localhost:3001'; // Asumsi backend berjalan di port 3001
+
 export default function LoginPage() {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const router = useRouter(); // Dapatkan router untuk navigasi
+  const router = useRouter();
 
-  const handleLogin = (e) => {
-    e.preventDefault(); // Mencegah form dari refresh halaman
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    console.log('Mencoba login dengan username:', username);
 
-    // --- SIMULASI LOGIN ---
-    // Di aplikasi nyata, di sini Anda akan mengirim `email` dan `password` ke API.
-    // Jika API merespons dengan sukses, Anda akan mendapatkan token.
-    // Untuk sekarang, kita anggap login selalu berhasil.
-    console.log('Login berhasil untuk:', email);
+    try {
+      const response = await fetch(`${API_BASE_URL}/user/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      });
 
-    // Simpan status login di localStorage browser.
-    // Ini adalah cara kita "mengingat" pengguna di seluruh halaman.
-    localStorage.setItem('isLoggedIn', 'true');
+      const data = await response.json();
 
-    // Arahkan pengguna ke halaman dashboard setelah login berhasil.
-    router.push('/dashboard');
+      if (!response.ok) {
+        throw new Error(data.message || 'Login gagal.');
+      }
+
+      // Logika BARU: Simpan access_token dari respons JSON ke localStorage
+      if (data.access_token) {
+        localStorage.setItem('accessToken', data.access_token);
+        console.log('Login berhasil, token disimpan di localStorage.');
+        router.push('/dashboard');
+      } else {
+        throw new Error('Token tidak ditemukan di dalam respons dari server.');
+      }
+
+    } catch (error) {
+      console.error('Terjadi kesalahan saat login:', error);
+      alert(error.message);
+    }
   };
 
   return (
@@ -31,12 +51,12 @@ export default function LoginPage() {
       <h1>Login ke Dashboard</h1>
       <form onSubmit={handleLogin}>
         <div style={{ marginBottom: '1rem' }}>
-          <label htmlFor="email">Email</label>
+          <label htmlFor="username">Username</label>
           <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            type="text"
+            id="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             required
             style={{ width: '100%', padding: '0.5rem' }}
           />

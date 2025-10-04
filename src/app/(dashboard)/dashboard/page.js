@@ -7,7 +7,9 @@ export default function DashboardPage() {
   const router = useRouter();
 
   const handleLogout = () => {
-    localStorage.removeItem('isLoggedIn');
+    // Logika BARU: Hapus accessToken dari localStorage secara langsung
+    localStorage.removeItem('accessToken');
+    console.log('Logout berhasil, token dihapus dari localStorage.');
     router.push('/login');
   };
 

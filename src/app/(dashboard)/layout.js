@@ -1,29 +1,33 @@
 
-"use client"; // Layout ini butuh interaksi client-side
+"use client";
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-// Layout ini menerima 'children', yaitu halaman yang akan ditampilkan (misal: page.js)
 export default function DashboardLayout({ children }) {
   const router = useRouter();
   const [isChecking, setIsChecking] = useState(true);
 
   useEffect(() => {
-    const userIsLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    // Logika BARU: Periksa keberadaan access token di localStorage secara langsung
+    const token = localStorage.getItem('accessToken');
 
-    if (!userIsLoggedIn) {
+    if (!token) {
+      // Jika tidak ada token, tendang kembali ke halaman login.
+      console.log('Tidak ada token di localStorage, mengarahkan ke login.');
       router.replace('/login');
     } else {
+      // Jika token ditemukan, izinkan akses.
+      console.log('Token ditemukan di localStorage, mengizinkan akses.');
       setIsChecking(false);
     }
-  }, [router]);
+  }, [router]); // Jalankan efek ini jika router berubah.
 
-  // Tampilkan loading selama pengecekan
+  // Selama pengecekan, tampilkan pesan loading.
   if (isChecking) {
     return <p style={{ textAlign: 'center', marginTop: '2rem' }}>Memeriksa otorisasi...</p>;
   }
 
-  // Jika sudah lolos, tampilkan halaman yang diminta (children)
+  // Jika sudah lolos pengecekan, tampilkan konten dashboard.
   return <>{children}</>;
 }
