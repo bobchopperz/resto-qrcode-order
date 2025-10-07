@@ -2,6 +2,7 @@
 "use client";
 
 import { useRouter } from 'next/navigation';
+import DateID from '@/lib/dateId';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -16,10 +17,10 @@ export default function DashboardPage() {
   return (
     <main style={{ padding: '2rem' }}>
       <h1>Selamat Datang di Dashboard Utama</h1>
-      <p>Ini adalah konten rahasia yang hanya bisa dilihat setelah login.</p>
+      <p>Ini adalah catatan penjualan.</p>
       
       <div style={{ marginTop: '2rem', padding: '1rem', border: '1px solid #ccc' }}>
-        <h3>Data Penjualan Hari Ini</h3>
+        <h3>Data Penjualan Hari Ini {new DateID().format('d-MMM-yyyy')}</h3>
         <p>Nasi Goreng: 25 porsi</p>
         <p>Es Teh Manis: 40 gelas</p>
       </div>
