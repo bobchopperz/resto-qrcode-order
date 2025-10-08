@@ -9,8 +9,12 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@mantine/core": "^7.10.1",
+    "@mantine/dates": "^7.10.1",
+    "@mantine/hooks": "^7.10.1",
     "@next/env": "^15.5.3",
     "date-fns": "^4.1.0",
+    "dayjs": "^1.11.11",
     "lucide-react": "^0.542.0",
     "next": "15.5.2",
     "react": "19.1.0",
@@ -24,6 +28,8 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.5.2",
+    "postcss": "^8.4.38",
+    "postcss-preset-mantine": "^1.15.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

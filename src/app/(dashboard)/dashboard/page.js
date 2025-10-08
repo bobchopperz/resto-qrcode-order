@@ -2,35 +2,43 @@
 "use client";
 
 import { useRouter } from 'next/navigation';
-import DateID from '@/lib/dateId';
+import DailySales from '@/components/DailySales'; // 1. Import komponen baru
 
 export default function DashboardPage() {
   const router = useRouter();
 
   const handleLogout = () => {
-    // Logika BARU: Hapus accessToken dari localStorage secara langsung
-    localStorage.removeItem('accessToken');
-    console.log('Logout berhasil, token dihapus dari localStorage.');
+    // Logika logout Anda (menghapus cookie via API atau localStorage)
+    // Untuk sekarang, kita asumsikan ini sudah benar
+    localStorage.removeItem('accessToken'); // Atau panggil API logout
     router.push('/login');
   };
 
   return (
     <main style={{ padding: '2rem' }}>
-      <h1>Selamat Datang di Dashboard Utama</h1>
-      <p>Ini adalah catatan penjualan.</p>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <h1>Bakso Sedap Nikmat</h1>
+        <button 
+          onClick={handleLogout} 
+          style={{ 
+            padding: '0.5rem 1rem',
+            border: 'none',
+            borderRadius: '4px',
+            backgroundColor: 'crimson', 
+            color: 'white',
+            cursor: 'pointer'
+          }}
+        >
+          Logout
+        </button>
+      </div>
+      <p>Selamat datang, berikut adalah ringkasan penjualan Anda.</p>
       
-      <div style={{ marginTop: '2rem', padding: '1rem', border: '1px solid #ccc' }}>
-        <h3>Data Penjualan Hari Ini {new DateID().format('d-MMM-yyyy')}</h3>
-        <p>Nasi Goreng: 25 porsi</p>
-        <p>Es Teh Manis: 40 gelas</p>
+      {/* 2. Tampilkan komponen DailySales di sini */}
+      <div style={{ marginTop: '2rem' }}>
+        <DailySales />
       </div>
 
-      <button 
-        onClick={handleLogout} 
-        style={{ marginTop: '2rem', backgroundColor: 'crimson', color: 'white' }}
-      >
-        Logout
-      </button>
     </main>
   );
 }

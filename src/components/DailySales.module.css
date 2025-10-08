@@ -1,0 +1,204 @@
+/* Styles for DailySales Component */
+
+.container {
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.title {
+  margin-top: 0;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 0.5rem;
+    color:dimgrey;
+}
+
+/* --- Filter Controls --- */
+.controlsContainer {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  align-items: center;
+  position: relative; /* Needed for popover positioning */
+    color:dimgrey;
+}
+
+.controlsContainer select {
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background-color: white;
+  font-size: 0.9rem;
+}
+
+/* NEW: Styles for the custom month picker button */
+.monthPickerButton {
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background-color: white;
+  font-size: 0.9rem;
+  cursor: pointer;
+  width: 120px; /* Give it a fixed width */
+  text-align: left;
+}
+
+/* NEW: Styles for the popover that contains the MonthPicker */
+.monthPickerPopover {
+  position: absolute;
+  top: 100%; /* Position it right below the controls */
+  right: 0; /* Align to the right side of the container */
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 10; /* Make sure it appears on top of other content */
+}
+
+
+.list {
+  list-style: none;
+  padding: 0;
+}
+
+.listItem {
+  display: grid; /* Use grid for better alignment */
+  grid-template-columns: 1fr 1fr 1fr 100px; /* Date, Margin, Total, Button */
+  gap: 1rem;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #eee;
+    color:dimgrey;
+}
+
+.dateText {
+    color : grey;
+}
+
+.totalText {
+  color: #005a9c; /* Blue for total sales */
+  font-weight: 500;
+}
+
+.marginText {
+  color: #008000; /* Green for margin */
+  font-weight: 500;
+}
+
+.button {
+  padding: 0.4rem 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: dodgerblue;
+  justify-self: end; /* Align button to the right */
+    color : whitesmoke;
+}
+
+.button:hover {
+  background-color: darkblue;
+}
+
+/* --- Modal Styles (No Changes) --- */
+.dailyModalBackdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  color: dimgrey;
+}
+.dailyModalContent {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 700px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  max-height: 80vh;
+  overflow-y: auto;
+}
+.transactionModalBackdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+.transactionModalContent {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+}
+.closeButton {
+  border: none;
+  background: transparent;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+.modalFooter {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #ddd;
+  text-align: right;
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+.th {
+  border-bottom: 2px solid #ddd;
+  padding: 0.5rem;
+  text-align: left;
+  font-size: 0.9em;
+}
+.td {
+  border-bottom: 1px solid #eee;
+  padding: 0.5rem;
+  vertical-align: top;
+}
+.transactionItem {
+  padding: 0.75rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  margin-bottom: 0.75rem;
+  background-color: #fafafa;
+}
+.transactionHeader {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+.transactionDetails {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.25rem 1rem;
+  font-size: 0.9em;
+  color: #555;
+}
+.transactionActions {
+  margin-top: 0.75rem;
+  text-align: right;
+}
