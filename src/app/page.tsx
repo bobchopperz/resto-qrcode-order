@@ -186,12 +186,6 @@ export default function Home() {
 
       {/* Main Content */}
       <main className="relative flex-grow container mx-auto flex flex-col items-center text-center p-4 md:p-8 overflow-hidden">
-        {/* Background Icon Grid */}
-        <div className="absolute inset-0 z-0 grid grid-cols-3 gap-12 text-slate-200 opacity-75 blur-sm">
-          {icons.map(({ Icon, key }) => (
-            <Icon key={key} size={72} strokeWidth={1} />
-          ))}
-        </div>
 
         {/* Foreground Content */}
         <div className="relative z-10 w-full">
