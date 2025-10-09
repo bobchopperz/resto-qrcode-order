@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import styles from './MenuTable.module.css';
-import { Plus, Edit, Trash2, Eye, X } from 'lucide-react';
+import { Plus, Edit, Trash2, Camera, X } from 'lucide-react';
 import AddMenuModal from './AddMenuModal';
 import EditMenuModal from './EditMenuModal'; // Import komponen EditMenuModal
 
@@ -96,7 +96,7 @@ export default function MenuTable() {
                         className={`${styles.actionButton} ${styles.showButton}`}
                         onClick={() => setImageToShow(`${process.env.NEXT_PUBLIC_EXTERNAL_APACHE}${item.imageUrl}`)}
                       >
-                        <Eye size={16} />
+                        <Camera size={16} />
                       </button>
                     </div>
                   </td>
