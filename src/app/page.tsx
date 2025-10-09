@@ -4,15 +4,6 @@ import { useState, useMemo, useEffect } from "react";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 import {
-  Citrus,
-  Cookie,
-  CookingPot,
-  Croissant,
-  CupSoda,
-  Hamburger,
-  HandPlatter,
-  Sandwich,
-  Soup,
   ShoppingCart,
   Minus,
   Plus,
