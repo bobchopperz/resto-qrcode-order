@@ -18,14 +18,11 @@ const formatRupiah = (number) => {
 
 // --- Child Component (Modal dengan Accordion) ---
 function DailyDetailModal({ dayData, onClose }) {
-  // State untuk accordion, dikelola di dalam modal ini
   const [openAccordionId, setOpenAccordionId] = useState(null);
 
   if (!dayData) return null;
 
-  // Fungsi untuk membuka/menutup accordion
   const handleToggleAccordion = (transactionId) => {
-    // Jika ID yang sama diklik lagi, tutup. Jika beda, buka yang baru.
     setOpenAccordionId(currentId => (currentId === transactionId ? null : transactionId));
   };
 
@@ -34,7 +31,7 @@ function DailyDetailModal({ dayData, onClose }) {
       <div className={styles.dailyModalContent} onClick={(e) => e.stopPropagation()}>
         <div className={styles.modalHeader}>
           <h2>Rincian Transaksi Harian</h2>
-          <h2>Tanggal: {dayData.formattedDate}</h2>
+          <h2>{dayData.formattedDate}</h2>
           <button className={styles.closeButton} onClick={onClose}>X</button>
         </div>
 
@@ -54,7 +51,6 @@ function DailyDetailModal({ dayData, onClose }) {
                 </button>
               </div>
 
-              {/* Accordion Content: Muncul jika ID transaksi cocok dengan state */}
               {openAccordionId === transaction._id && (
                 <div className={styles.accordionContent}>
                   <table className={styles.table}>
@@ -81,7 +77,7 @@ function DailyDetailModal({ dayData, onClose }) {
           ))}
         </div>
         <div className={styles.modalFooter}>
-          <strong>Total Penjualan : {formatRupiah(dayData.totalSales)}</strong>
+          <strong>Total Penjualan Hari Ini: {formatRupiah(dayData.totalSales)}</strong>
         </div>
       </div>
     </div>
@@ -101,23 +97,22 @@ function DailySalesContent() {
       setAggregatedData([]);
 
       const year = selectedDate.getFullYear();
-      const month = selectedDate.getMonth() + 1; // getMonth() is 0-indexed
+      const month = selectedDate.getMonth() + 1;
       const endpoint = `${process.env.NEXT_PUBLIC_BACKEND_API_BASE_URL}/order/${year}/${month}`;
 
       try {
         const response = await fetch(endpoint);
+
         if (!response.ok) {
-          console.error(`HTTP error! status: ${response.status} from ${endpoint}`);
-          // Opsional: tampilkan pesan error ke pengguna
-          // alert(`Gagal memuat data penjualan. Status: ${response.status}. Silakan coba lagi.`);
-          return; // Hentikan eksekusi lebih lanjut jika ada error HTTP
+          console.error(`HTTP error! Status: ${response.status}, dari ${endpoint}.`);
+          return;
         }
+
         const data = await response.json();
         processAndSetData(data);
+
       } catch (error) {
-        console.error("Failed to fetch daily sales:", error);
-        // Opsional: tampilkan pesan error ke pengguna
-        // alert('Terjadi kesalahan saat mengambil data penjualan. Silakan coba lagi.');
+        console.error(`Gagal fetch. Error: ${error.message}`, error);
       } finally {
         setIsLoading(false);
       }
@@ -132,16 +127,15 @@ function DailySalesContent() {
       return;
     }
     const dailyGroups = transactions.reduce((acc, transaction) => {
-      // Perbaikan: Gunakan transaction.timestamp langsung karena formatnya string
       if (!transaction.timestamp) {
-        console.warn('Transaksi tidak memiliki timestamp yang valid:', transaction);
-        return acc; // Lewati transaksi ini
+        console.warn('Transaksi dilewati karena tidak ada timestamp:', transaction);
+        return acc;
       }
 
       const dateObj = new Date(transaction.timestamp);
-      if (isNaN(dateObj.getTime())) { // Cek apakah tanggal valid
-        console.warn('Nilai tanggal tidak valid untuk transaksi:', transaction.timestamp, transaction);
-        return acc; // Lewati transaksi ini
+      if (isNaN(dateObj.getTime())) {
+        console.warn('Transaksi dilewati karena timestamp tidak valid:', transaction.timestamp, transaction);
+        return acc;
       }
 
       const dateKey = dateObj.toISOString().split('T')[0];
@@ -197,7 +191,6 @@ function DailySalesContent() {
         </ul>
       )}
 
-      {/* Modal hanya memanggil DailyDetailModal */}
       <DailyDetailModal 
         dayData={selectedDay} 
         onClose={() => setSelectedDay(null)} 
