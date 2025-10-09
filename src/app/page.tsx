@@ -19,29 +19,6 @@ import {
   X,
 } from "lucide-react";
 
-const icons = [
-  // Row 1
-  { Icon: Soup, key: "soup-1" },
-  { Icon: Cookie, key: "cookie-1" },
-  { Icon: Citrus, key: "citrus-1" },
-  // Row 2
-  { Icon: Croissant, key: "croissant-1" },
-  { Icon: Hamburger, key: "hamburger-1" },
-  { Icon: Sandwich, key: "sandwich-1" },
-  // Row 3
-  { Icon: HandPlatter, key: "hand-platter-1" },
-  { Icon: CookingPot, key: "cooking-pot-1" },
-  { Icon: CupSoda, key: "cup-soda-1" },
-  // Row 4
-  { Icon: Soup, key: "soup-2" },
-  { Icon: Cookie, key: "cookie-2" },
-  { Icon: Citrus, key: "citrus-2" },
-  // Row 5
-  { Icon: Croissant, key: "croissant-2" },
-  { Icon: Hamburger, key: "hamburger-2" },
-  { Icon: Sandwich, key: "sandwich-2" },
-];
-
 interface MenuItem {
   _id: string;
   name: string;
