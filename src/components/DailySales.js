@@ -34,9 +34,10 @@ function DailyDetailModal({ dayData, onClose }) {
       <div className={styles.dailyModalContent} onClick={(e) => e.stopPropagation()}>
         <div className={styles.modalHeader}>
           <h2>Rincian Transaksi Harian</h2>
+          <h2>Tanggal: {dayData.formattedDate}</h2>
           <button className={styles.closeButton} onClick={onClose}>X</button>
         </div>
-        <h3>Tanggal: {dayData.formattedDate}</h3>
+
         <div>
           {dayData.transactions.map(transaction => (
             <div key={transaction._id} className={styles.transactionItem}>
@@ -80,7 +81,7 @@ function DailyDetailModal({ dayData, onClose }) {
           ))}
         </div>
         <div className={styles.modalFooter}>
-          <strong>Total Penjualan Hari Ini: {formatRupiah(dayData.totalSales)}</strong>
+          <strong>Total Penjualan : {formatRupiah(dayData.totalSales)}</strong>
         </div>
       </div>
     </div>
@@ -100,20 +101,26 @@ function DailySalesContent() {
       setAggregatedData([]);
 
       const year = selectedDate.getFullYear();
-      const month = selectedDate.getMonth() + 1;
+      const month = selectedDate.getMonth() + 1; // getMonth() is 0-indexed
+      const endpoint = `${process.env.NEXT_PUBLIC_BACKEND_API_BASE_URL}/order/${year}/${month}`;
 
-      const endpoint = `/api/sales?year=${year}&month=${month}`;
-      console.log(`MOCKUP: Akan memanggil endpoint: ${endpoint}`);
-
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      const filteredData = rawApiData.filter(item => {
-        const itemDate = new Date(item.timestamp.$date);
-        return itemDate.getFullYear() === year && (itemDate.getMonth() + 1) === month;
-      });
-
-      processAndSetData(filteredData);
-      setIsLoading(false);
+      try {
+        const response = await fetch(endpoint);
+        if (!response.ok) {
+          console.error(`HTTP error! status: ${response.status} from ${endpoint}`);
+          // Opsional: tampilkan pesan error ke pengguna
+          // alert(`Gagal memuat data penjualan. Status: ${response.status}. Silakan coba lagi.`);
+          return; // Hentikan eksekusi lebih lanjut jika ada error HTTP
+        }
+        const data = await response.json();
+        processAndSetData(data);
+      } catch (error) {
+        console.error("Failed to fetch daily sales:", error);
+        // Opsional: tampilkan pesan error ke pengguna
+        // alert('Terjadi kesalahan saat mengambil data penjualan. Silakan coba lagi.');
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     fetchData();
@@ -125,9 +132,21 @@ function DailySalesContent() {
       return;
     }
     const dailyGroups = transactions.reduce((acc, transaction) => {
-      const dateKey = new Date(transaction.timestamp.$date).toISOString().split('T')[0];
+      // Perbaikan: Gunakan transaction.timestamp langsung karena formatnya string
+      if (!transaction.timestamp) {
+        console.warn('Transaksi tidak memiliki timestamp yang valid:', transaction);
+        return acc; // Lewati transaksi ini
+      }
+
+      const dateObj = new Date(transaction.timestamp);
+      if (isNaN(dateObj.getTime())) { // Cek apakah tanggal valid
+        console.warn('Nilai tanggal tidak valid untuk transaksi:', transaction.timestamp, transaction);
+        return acc; // Lewati transaksi ini
+      }
+
+      const dateKey = dateObj.toISOString().split('T')[0];
       if (!acc[dateKey]) {
-        acc[dateKey] = { date: new Date(transaction.timestamp.$date), formattedDate: new DateID(transaction.timestamp.$date).format('d-MMM-yyyy'), totalSales: 0, totalMargin: 0, totalModal: 0, transactions: [] };
+        acc[dateKey] = { date: dateObj, formattedDate: new DateID(dateObj).format('d-MMM-yyyy'), totalSales: 0, totalMargin: 0, totalModal: 0, transactions: [] };
       }
       acc[dateKey].totalSales += transaction.total_kesuluruhan;
       acc[dateKey].totalMargin += transaction.total_margin_keseluruhan;

@@ -62,17 +62,16 @@ export default function Home() {
   };
 
   const handleUpdateQuantity = (itemId: string, amount: number) => {
-    setCart((prevCart) => {
-      const updatedCart = prevCart
+    setCart((prevCart) =>
+      prevCart
         .map((item) => {
           if (item._id === itemId) {
             return { ...item, quantity: item.quantity + amount };
           }
           return item;
         })
-        .filter((item) => item.quantity > 0); // Hapus item jika quantity 0 atau kurang
-      return updatedCart;
-    });
+        .filter((item) => item.quantity > 0)
+    );
   };
 
   const { totalItems, totalPrice } = useMemo(() => {
@@ -127,7 +126,8 @@ export default function Home() {
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({ message: 'No error details from server.' }));
         console.error("Backend error:", errorData);
-        throw new Error(`Gagal mengirim pesanan. Status: ${response.status}`);
+        alert(`Gagal mengirim pesanan. Status: ${response.status}. Silakan coba lagi.`);
+        return;
       }
 
       alert("Sipp Kakak! Pesananmu sudah kami terima dan sedang diproses.");
@@ -141,8 +141,7 @@ export default function Home() {
     } catch (error) {
       console.error("Failed to submit order:", error);
       // Menampilkan pesan error yang lebih informatif jika ada
-      const errorMessage = error instanceof Error ? error.message : 'Terjadi kesalahan saat mengirim pesanan.';
-      alert(errorMessage + ' Silakan coba lagi.');
+      alert('Terjadi kesalahan saat mengirim pesanan. Silakan coba lagi.');
     } finally {
         setIsSubmitting(false);
     }
