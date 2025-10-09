@@ -7,53 +7,6 @@ import DateID from '@/lib/dateId';
 import { MantineProvider } from '@mantine/core';
 import MonthPickerDropdown from './MonthPickerDropdown';
 
-// --- Sampel Data dari Backend ---
-const rawApiData = [
-  {
-    "timestamp": { "$date": "2025-09-19T13:46:55.853Z" },
-    "total_kesuluruhan": 12000,
-    "orders": [
-      { "menu_id": { "$oid": "68c675dd92af3629e55f99e1" }, "name": "Nasi Goreng Royal", "kuantiti": 1, "sub_total": 12000, "modal": 10000, "subtotal_modal": 10000, "subtotal_margin": 2000 }
-    ],
-    "no_wa_pelanggan": "6281268778159",
-    "total_margin_keseluruhan": 2000,
-    "_id": "37fc93cf-011c-4c22-9e3d-b44e3f136c6e",
-    "createdAt": { "$date": "2025-09-19T13:46:55.939Z" },
-    "__v": 0,
-    "total_modal_keseluruhan": 10000,
-    "nama_pelanggan": "rheza",
-    "updatedAt": { "$date": "2025-09-19T13:46:55.939Z" }
-  },
-  {
-    "timestamp": { "$date": "2025-10-05T13:05:13.412Z" },
-    "orders": [
-      { "menu_id": { "$oid": "68c675dd92af3629e55f99e1" }, "name": "Nasi Goreng Royal", "kuantiti": 1, "sub_total": 12000, "modal": 10000, "subtotal_modal": 10000, "subtotal_margin": 2000 },
-      { "menu_id": { "$oid": "68c675dd92af3629e55f99e2" }, "name": "Steak Sirloin", "kuantiti": 1, "sub_total": 11000, "modal": 10000, "subtotal_modal": 10000, "subtotal_margin": 1000 }
-    ],
-    "no_wa_pelanggan": "6285278971111",
-    "nama_pelanggan": "Catur",
-    "total_kesuluruhan": 23000,
-    "createdAt": { "$date": "2025-10-05T13:05:13.558Z" },
-    "total_margin_keseluruhan": 3000,
-    "_id": "f87a8184-58bf-4d9b-8a1a-9bae0b4222d5",
-    "updatedAt": { "$date": "2025-10-05T13:05:13.558Z" },
-    "total_modal_keseluruhan": 20000,
-    "__v": 0
-  },
-  {
-    "timestamp": { "$date": "2025-10-05T18:00:00.000Z" },
-    "total_kesuluruhan": 12000,
-    "orders": [
-      { "menu_id": { "$oid": "68c675dd92af3629e55f99e1" }, "name": "Nasi Goreng Royal", "kuantiti": 1, "sub_total": 12000, "modal": 10000, "subtotal_modal": 10000, "subtotal_margin": 2000 }
-    ],
-    "no_wa_pelanggan": "628111111111",
-    "total_margin_keseluruhan": 2000,
-    "_id": "aaaaaaaa-58bf-4d9b-8a1a-9bae0b4222d5",
-    "total_modal_keseluruhan": 10000,
-    "nama_pelanggan": "Siska",
-  }
-];
-
 // --- Helper & Utility Functions ---
 const formatRupiah = (number) => {
   return new Intl.NumberFormat('id-ID', {
