@@ -154,7 +154,6 @@ export default function Home() {
 
       {/* Main Content */}
       <main className="relative flex-grow container mx-auto flex flex-col items-center text-center p-4 md:p-8 overflow-hidden">
-
         {/* Foreground Content */}
         <div className="relative z-10 w-full">
           <div className="mb-12">
