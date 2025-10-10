@@ -3,12 +3,15 @@
 import Link from 'next/link';
 import styles from './Sidebar.module.css';
 import { ChevronLeft, LayoutDashboard, ClipboardList, BarChart2, Salad } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faWhatsapp } from '@fortawesome/free-brands-svg-icons';
 
 // Daftar menu untuk sidebar
 const menuItems = [
   { href: '/dashboard', label: 'Dashboard', icon: <LayoutDashboard size={20} /> },
   { href: '/dashboard/menu', label: 'Menu', icon: <ClipboardList size={20} /> },
   { href: '/dashboard/sales', label: 'Penjualan', icon: <BarChart2 size={20} /> },
+  { href: '/dashboard/whatsapp', label: 'Whatsapp', icon: <FontAwesomeIcon icon={faWhatsapp} size="lg" /> }, // Menggunakan ikon Font Awesome
 ];
 
 export default function Sidebar({ isCollapsed, toggleSidebar }) {

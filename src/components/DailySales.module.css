@@ -1,27 +1,31 @@
 /* Styles for DailySales Component */
 
 .container {
-  padding: 1rem;
-  border: 1px solid #ddd;
+  background-color: #ffffff;
+  padding: 1.5rem;
   border-radius: 8px;
-  background-color: #f9f9f9;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  border: none;
 }
 
 .title {
-  margin-top: 0;
-  border-bottom: 2px solid #eee;
-  padding-bottom: 0.5rem;
-    color:dimgrey;
+  font-size: 1.5rem;
+   /*font-weight: 450; */
+  color: dimgrey; /* Reverted */
+  margin: 0;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e9ecef;
+  margin-bottom: 1.5rem;
 }
 
 /* --- Filter Controls --- */
 .controlsContainer {
   display: flex;
   gap: 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
   align-items: center;
-  position: relative; /* Needed for popover positioning */
-    color:dimgrey;
+  position: relative;
+  color: dimgrey; /* Reverted */
 }
 
 .controlsContainer select {
@@ -40,50 +44,56 @@
   background-color: white;
   font-size: 0.9rem;
   cursor: pointer;
-  width: 120px; /* Give it a fixed width */
+  width: 120px;
   text-align: left;
 }
 
 /* NEW: Styles for the popover that contains the MonthPicker */
 .monthPickerPopover {
   position: absolute;
-  top: 100%; /* Position it right below the controls */
-  right: 0; /* Align to the right side of the container */
+  top: 100%;
+  right: 0;
   background-color: white;
   border: 1px solid #ccc;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  z-index: 10; /* Make sure it appears on top of other content */
+  z-index: 10;
 }
-
 
 .list {
   list-style: none;
   padding: 0;
-    color:#434040;
+  font-size: 0.95rem;
+  color: #434040; /* Reverted */
 }
 
 .listItem {
-  display: grid; /* Use grid for better alignment */
-  grid-template-columns: 1fr 1fr 1fr 100px; /* Date, Margin, Total, Button */
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 100px;
   gap: 1rem;
   align-items: center;
-  padding: 0.75rem 0;
-  border-bottom: 1px solid #eee;
-    color:#434040;
+  padding: 1rem;
+  border-bottom: 1px solid #e9ecef;
+  color: #434040; /* Reverted */
+  transition: background-color 0.2s ease;
+}
+
+.listItem:hover {
+  background-color: #f1f3f5;
 }
 
 .dateText {
-    color : grey;
+  color: grey;
+  font-weight: 500;
 }
 
 .totalText {
-  color: #005a9c; /* Blue for total sales */
+  color: #005a9c;
   font-weight: 500;
 }
 
 .marginText {
-  color: #008000; /* Green for margin */
+  color: #008000;
   font-weight: 500;
 }
 
@@ -93,15 +103,15 @@
   border-radius: 4px;
   cursor: pointer;
   background-color: dodgerblue;
-  justify-self: end; /* Align button to the right */
-    color : whitesmoke;
+  justify-self: end;
+  color: whitesmoke;
 }
 
 .button:hover {
   background-color: darkblue;
 }
 
-/* --- Modal Styles (No Changes) --- */
+/* --- Modal Styles --- */
 .dailyModalBackdrop {
   position: fixed;
   top: 0;
@@ -113,7 +123,7 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  color: #434040;
+  color: #434040; /* Reverted */
 }
 .dailyModalContent {
   background-color: white;
@@ -149,37 +159,40 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #e9ecef;
   margin-bottom: 1rem;
-  padding-bottom: 0.5rem;
+  padding-bottom: 1rem;
 }
 .closeButton {
   border: none;
   background: transparent;
   font-size: 1.5rem;
   cursor: pointer;
+  /* color: #666; (Reverted) */
 }
 .modalFooter {
   margin-top: 1.5rem;
   padding-top: 1rem;
-  border-top: 1px solid #ddd;
+  border-top: 1px solid #e9ecef;
   text-align: right;
 }
 .table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 1rem;
+  font-size: 0.95rem;
 }
-.th {
-  border-bottom: 2px solid #ddd;
-  padding: 0.5rem;
-  text-align: left;
-  font-size: 0.9em;
+.liHeader {
+    background-color: #f8f9fa;
+    color: #41414c;
+    font-weight: 350;
+    font-size: 1.0rem;
+    letter-spacing: 0.5px;
 }
 .td {
-  border-bottom: 1px solid #eee;
-  padding: 0.5rem;
-  vertical-align: top;
+  border-bottom: 1px solid #e9ecef;
+  padding: 1rem;
+  vertical-align: middle;
 }
 .transactionItem {
   padding: 0.75rem;

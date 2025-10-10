@@ -62,7 +62,7 @@ export default function MenuTable() {
   return (
     <div className={styles.tableContainer}>
       <div className={styles.header}>
-        <h2>Daftar Menu</h2>
+        <h1>Daftar Menu</h1>
         <button className={styles.addButton} onClick={() => setIsAddModalOpen(true)}>
           <Plus size={18} />
           <span>Tambah Menu</span>

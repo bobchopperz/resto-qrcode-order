@@ -38,12 +38,12 @@ function DailyDetailModal({ dayData, onClose }) {
         <div>
           {dayData.transactions.map(transaction => (
             <div key={transaction._id} className={styles.transactionItem}>
-              <p className={styles.transactionHeader}>Pelanggan: {transaction.nama_pelanggan || 'N/A'}</p>
+              <p className={styles.transactionHeader}>Pelanggan : {transaction.nama_pelanggan || 'N/A'}</p>
               <div className={styles.transactionDetails}>
-                <span><strong>No. WA:</strong> {transaction.no_wa_pelanggan || '-'}</span>
-                <span><strong>Total:</strong> {formatRupiah(transaction.total_kesuluruhan)}</span>
-                <span><strong>Modal:</strong> {formatRupiah(transaction.total_modal_keseluruhan)}</span>
-                <span><strong>Margin:</strong> {formatRupiah(transaction.total_margin_keseluruhan)}</span>
+                <span><strong>No. WA :</strong> {transaction.no_wa_pelanggan || '-'}</span>
+                <span><strong>Total :</strong> {formatRupiah(transaction.total_kesuluruhan)}</span>
+                <span><strong>Modal :</strong> {formatRupiah(transaction.total_modal_keseluruhan)}</span>
+                <span><strong>Margin :</strong> {formatRupiah(transaction.total_margin_keseluruhan)}</span>
               </div>
               <div className={styles.transactionActions}>
                 <button className={styles.button} onClick={() => handleToggleAccordion(transaction._id)}>
@@ -155,7 +155,7 @@ function DailySalesContent() {
   return (
     <div className={styles.container}>
       <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-        <h2 className={styles.title}>Ringkasan Penjualan Bulanan</h2>
+        <h1 className={styles.title}>Ringkasan Penjualan Bulanan</h1>
         <div className={styles.controlsContainer}>
           <MonthPickerDropdown
             value={selectedDate}
@@ -165,10 +165,10 @@ function DailySalesContent() {
       </div>
 
       {isLoading ? (
-        <p style={{textAlign: 'center', margin: '2rem'}}>Memuat data...</p>
+        <p style={{textAlign: 'center', margin: '2rem'}}>Memuat data ...</p>
       ) : (
         <ul className={styles.list}>
-            <li className={`${styles.listItem} ${styles.dateText}`}>
+            <li className={`${styles.listItem} ${styles.dateText} ${styles.liHeader}`}>
                 <span>Tanggal</span>
                 <span>Total Margin</span>
                 <span>Total Penjualan</span>
