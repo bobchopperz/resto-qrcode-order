@@ -126,9 +126,18 @@
   width: calc(100% - 250px);
   background-color: #f8f9fa; /* Light grey background for content area */
   min-height: 100vh;
+  flex-grow: 1; /* Ditambahkan: Agar mainContent mengisi sisa ruang horizontal */
+  display: flex; /* Ditambahkan: Agar children di dalamnya bisa menggunakan flexbox */
+  flex-direction: column; /* Ditambahkan: Agar children di dalamnya tersusun vertikal */
 }
 
 .mainContent.mainCollapsed {
   margin-left: 80px;
   width: calc(100% - 80px);
+}
+
+/* Dashboard Layout Container */
+.dashboardContainer {
+  display: flex; /* Ditambahkan: Menggunakan flexbox */
+  min-height: 100vh; /* Ditambahkan: Mengambil seluruh tinggi viewport */
 }
