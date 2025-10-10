@@ -29,6 +29,7 @@ export default function Home() {
   const [customerWa, setCustomerWa] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [imageToZoom, setImageToZoom] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchMenu = async () => {
@@ -48,14 +49,12 @@ export default function Home() {
     setCart((prevCart) => {
       const existingItem = prevCart.find((cartItem) => cartItem._id === item._id);
       if (existingItem) {
-        // Item sudah ada, tambah quantity
         return prevCart.map((cartItem) =>
           cartItem._id === item._id
             ? { ...cartItem, quantity: cartItem.quantity + 1 }
             : cartItem
         );
       } else {
-        // Item baru, tambahkan ke keranjang
         return [...prevCart, { ...item, quantity: 1 }];
       }
     });
@@ -97,7 +96,6 @@ export default function Home() {
 
     setIsSubmitting(true);
 
-    // Format nomor WhatsApp ke "62"
     const formattedWa = customerWa.startsWith("0") ? `62${customerWa.substring(1)}` : customerWa;
 
     const orderData = {
@@ -132,7 +130,6 @@ export default function Home() {
 
       alert("Sipp Kakak! Pesananmu sudah kami terima dan sedang diproses.");
 
-      // Reset state untuk kembali ke tampilan awal
       setIsModalOpen(false);
       setCart([]);
       setCustomerName("");
@@ -140,7 +137,6 @@ export default function Home() {
 
     } catch (error) {
       console.error("Failed to submit order:", error);
-      // Menampilkan pesan error yang lebih informatif jika ada
       alert('Terjadi kesalahan saat mengirim pesanan. Silakan coba lagi.');
     } finally {
         setIsSubmitting(false);
@@ -151,9 +147,7 @@ export default function Home() {
     <div className="flex flex-col min-h-screen bg-slate-100">
       <Navbar />
 
-      {/* Main Content */}
       <main className="relative flex-grow container mx-auto flex flex-col items-center text-center p-4 md:p-8 overflow-hidden">
-        {/* Foreground Content */}
         <div className="relative z-10 w-full">
           <div className="mb-12">
             <h2 className="text-4xl font-bold mb-4 text-gray-800">
@@ -164,17 +158,26 @@ export default function Home() {
             </p>
           </div>
 
-          {/* Menu Grid */}
           <div className="w-full max-w-5xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
               {menu.map((item) => {
                 const cartItem = cart.find(ci => ci._id === item._id);
                 return (
-                  <div key={item._id} className="bg-white/80 backdrop-blur-sm rounded-lg shadow-lg overflow-hidden flex flex-col">
-                    <img src={`${process.env.NEXT_PUBLIC_EXTERNAL_APACHE}${item.imageUrl}`} alt={item.name} className="w-full h-48 object-cover" />
-                    <div className="p-6 flex flex-col flex-grow">
+                  <div key={item._id} className="group relative rounded-lg shadow-lg overflow-hidden h-96">
+                    <img 
+                      src={`${process.env.NEXT_PUBLIC_EXTERNAL_APACHE}${item.imageUrl}`}
+                      alt={item.name}
+                      className="w-full h-full object-cover"
+                    />
+                    <div 
+                      onClick={() => setImageToZoom(`${process.env.NEXT_PUBLIC_EXTERNAL_APACHE}${item.imageUrl}`)}
+                      className="absolute inset-0 z-10 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                    >
+                      <p className="text-white font-semibold">Klik untuk perbesar</p>
+                    </div>
+                    <div className="absolute bottom-0 left-0 right-0 z-20 p-6 bg-white/80 backdrop-blur-sm">
                       <h3 className="text-xl font-bold text-gray-800">{item.name}</h3>
-                      <p className="text-gray-600 my-2 flex-grow">{item.description}</p>
+                      <p className="text-gray-600 my-2">{item.description}</p>
                       <div className="flex justify-between items-center mt-4">
                         <p className="text-lg font-semibold text-emerald-600">
                           Rp {item.price.toLocaleString("id-ID")}
@@ -204,7 +207,6 @@ export default function Home() {
         </div>
       </main>
 
-      {/* Order Summary Bar */}
       {cart.length > 0 && (
         <div className="sticky bottom-0 z-20 bg-white shadow-2xl p-4 border-t-2 border-emerald-500">
           <div className="container mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
@@ -225,7 +227,6 @@ export default function Home() {
         </div>
       )}
 
-      {/* Order Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
           <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
@@ -291,6 +292,29 @@ export default function Home() {
               </button>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Modal Zoom Gambar */}
+      {imageToZoom && (
+        <div 
+            onClick={() => setImageToZoom(null)} 
+            className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4 cursor-zoom-out"
+        >
+            <div className="relative">
+                <button 
+                    onClick={() => setImageToZoom(null)} 
+                    className="absolute -top-4 -right-4 bg-white rounded-full p-1 text-gray-800 hover:bg-gray-200"
+                >
+                    <X size={24} />
+                </button>
+                <img 
+                    src={imageToZoom} 
+                    alt="Zoomed"
+                    className="max-w-[90vw] max-h-[90vh] object-contain"
+                    onClick={(e) => e.stopPropagation()} // Mencegah modal tertutup saat gambar diklik
+                />
+            </div>
         </div>
       )}
 
