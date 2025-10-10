@@ -37,7 +37,7 @@ export default function EditMenuModal({ isOpen, onClose, onMenuUpdated, menuItem
     formData.append('modal', modal);
     formData.append('price', price);
     if (imageFile) {
-      formData.append('image', imageFile);
+      formData.append('imageFile', imageFile); // Diubah dari 'image' menjadi 'imageFile'
     }
 
     try {
@@ -56,6 +56,7 @@ export default function EditMenuModal({ isOpen, onClose, onMenuUpdated, menuItem
       onClose();
     } catch (err) {
       setError(err.message);
+      alert(`Gagal memperbarui menu: ${err.message}`); // Menampilkan alert untuk error
       console.error('Error updating menu:', err);
     } finally {
       setIsSubmitting(false);
@@ -117,9 +118,10 @@ export default function EditMenuModal({ isOpen, onClose, onMenuUpdated, menuItem
             <input
               type="file"
               id="image"
-              accept="image/*"
+              accept="image/jpeg,image/png"
               onChange={(e) => setImageFile(e.target.files[0])}
             />
+            <p className={styles.imageHint}>Gambar landscape ratio 4:3 (jpg, jpeg, png)</p>
           </div>
           <div className={styles.formActions}>
             <button type="button" onClick={onClose} className={styles.cancelButton} disabled={isSubmitting}>Batal</button>

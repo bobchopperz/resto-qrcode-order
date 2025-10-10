@@ -261,6 +261,7 @@
   border-radius: 4px;
   font-size: 1rem;
   box-sizing: border-box; /* Penting untuk padding */
+  color: #333;
 }
 
 .menuForm textarea {
@@ -270,6 +271,12 @@
 
 .menuForm input[type="file"] {
   padding: 0.5rem 0;
+}
+
+.imageHint {
+  font-size: 0.8rem;
+  color: #6c757d;
+  margin-top: 0.5rem;
 }
 
 .menuForm .formActions {

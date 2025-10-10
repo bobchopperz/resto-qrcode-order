@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import styles from './MenuTable.module.css';
 import { Plus, Edit, Trash2, Camera, X } from 'lucide-react';
 import AddMenuModal from './AddMenuModal';
-import EditMenuModal from './EditMenuModal'; // Import komponen EditMenuModal
+import EditMenuModal from './EditMenuModal';
 
 const formatRupiah = (number) => {
   return new Intl.NumberFormat('id-ID', {
@@ -20,8 +20,8 @@ export default function MenuTable() {
   const [error, setError] = useState(null);
   const [imageToShow, setImageToShow] = useState(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false); // State untuk modal edit menu
-  const [menuItemToEdit, setMenuItemToEdit] = useState(null); // State untuk menyimpan data menu yang akan diedit
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [menuItemToEdit, setMenuItemToEdit] = useState(null);
 
   const fetchMenu = async () => {
     setIsLoading(true);
@@ -49,7 +49,27 @@ export default function MenuTable() {
     setIsEditModalOpen(true);
   };
 
-  // Fungsi untuk mendapatkan nama file dari URL/path
+  const handleDelete = async (menuId) => {
+    if (window.confirm('Apakah Kakak yakin ingin menghapus menu ini?')) {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_BASE_URL}/menu/${menuId}`, {
+          method: 'DELETE',
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({ message: 'Gagal menghapus menu.' }));
+          throw new Error(errorData.message || `HTTP error! Status: ${response.status}`);
+        }
+
+        alert('Menu berhasil dihapus!');
+        fetchMenu(); // Refresh daftar menu
+      } catch (err) {
+        alert(`Gagal menghapus menu: ${err.message}`);
+        console.error('Error deleting menu:', err);
+      }
+    }
+  };
+
   const getFilename = (path) => {
     if (!path) return 'Tidak ada gambar';
     return path.split('/').pop();
@@ -104,11 +124,14 @@ export default function MenuTable() {
                     <div className={styles.actionButtons}>
                       <button 
                         className={`${styles.actionButton} ${styles.editButton}`}
-                        onClick={() => handleEditClick(item)} // Panggil fungsi handleEditClick
+                        onClick={() => handleEditClick(item)}
                       >
                         <Edit size={16} />
                       </button>
-                      <button className={`${styles.actionButton} ${styles.deleteButton}`}>
+                      <button 
+                        className={`${styles.actionButton} ${styles.deleteButton}`}
+                        onClick={() => handleDelete(item._id)} // Panggil fungsi handleDelete
+                      >
                         <Trash2 size={16} />
                       </button>
                     </div>

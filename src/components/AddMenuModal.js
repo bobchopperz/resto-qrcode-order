@@ -26,7 +26,7 @@ export default function AddMenuModal({ isOpen, onClose, onMenuAdded }) {
     formData.append('modal', modal);
     formData.append('price', price);
     if (imageFile) {
-      formData.append('image', imageFile);
+      formData.append('imageFile', imageFile);
     }
 
     try {
@@ -51,6 +51,7 @@ export default function AddMenuModal({ isOpen, onClose, onMenuAdded }) {
       setImageFile(null);
     } catch (err) {
       setError(err.message);
+      alert(`Gagal menambahkan menu: ${err.message}`); // Menampilkan alert untuk error
       console.error('Error adding menu:', err);
     } finally {
       setIsSubmitting(false);
@@ -112,9 +113,10 @@ export default function AddMenuModal({ isOpen, onClose, onMenuAdded }) {
             <input
               type="file"
               id="image"
-              accept="image/*"
+              accept="image/jpeg,image/png"
               onChange={(e) => setImageFile(e.target.files[0])}
             />
+            <p className={styles.imageHint}>Gambar landscape ratio 4:3 (jpg, jpeg, png)</p>
           </div>
           <div className={styles.formActions}>
             <button type="button" onClick={onClose} className={styles.cancelButton} disabled={isSubmitting}>Batal</button>
